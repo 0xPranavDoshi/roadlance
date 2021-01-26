@@ -35,6 +35,7 @@ dependencies:
   video_player: ^1.0.1
   geolocator: ^6.1.13
   firebase_storage: ^5.2.0
+  google_sign_in: 4.5.9
   http: ^0.12.2
 
 dev_dependencies:

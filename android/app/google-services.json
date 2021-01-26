@@ -7,9 +7,46 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:181509771768:android:90295dc018d9e7c005c60d",
+        "mobilesdk_app_id": "1:181509771768:android:f1798461ff7df73605c60d",
         "android_client_info": {
           "package_name": "com.example.RoadLance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181509771768-079g5fvfqnkfvg3nkctlp35imkim748m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.RoadLance",
+            "certificate_hash": "ea44766227dbe187f299a91ff746e135ef8fa2c8"
+          }
+        },
+        {
+          "client_id": "181509771768-pk76o584b7idckmv1d46btq2gbkbpp85.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9ZOWBkWVIi8dxsvxlHqK_jaQK9iVzUsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181509771768-pk76o584b7idckmv1d46btq2gbkbpp85.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181509771768:android:7d57503ff7a0678105c60d",
+        "android_client_info": {
+          "package_name": "com.example.Roadlance_Police"
         }
       },
       "oauth_client": [
