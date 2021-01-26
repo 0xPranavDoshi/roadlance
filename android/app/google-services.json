@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "181509771768",
+    "project_id": "roadlance-130b5",
+    "storage_bucket": "roadlance-130b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181509771768:android:90295dc018d9e7c005c60d",
+        "android_client_info": {
+          "package_name": "com.example.RoadLance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181509771768-pk76o584b7idckmv1d46btq2gbkbpp85.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9ZOWBkWVIi8dxsvxlHqK_jaQK9iVzUsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181509771768-pk76o584b7idckmv1d46btq2gbkbpp85.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
