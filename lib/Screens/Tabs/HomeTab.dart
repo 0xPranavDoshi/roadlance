@@ -67,9 +67,10 @@ class _HomeTabState extends State<HomeTab> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Leaderboard",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 23)),
+                        Text(
+                          "Leaderboard",
+                          style: TextStyle(color: Colors.white, fontSize: 23),
+                        ),
                         Icon(
                           Icons.arrow_right,
                           color: Colors.white,
@@ -84,8 +85,10 @@ class _HomeTabState extends State<HomeTab> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text("Recent Uploads",
-                      style: TextStyle(color: Colors.white, fontSize: 23)),
+                  child: Text(
+                    "Recent Uploads",
+                    style: TextStyle(color: Colors.white, fontSize: 23),
+                  ),
                 ),
                 Container(
                   color: Colors.transparent,
@@ -105,6 +108,7 @@ class _HomeTabState extends State<HomeTab> {
                         );
                       } else {
                         return ListView(
+                          physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           children: snapshot.data.docs.map((
                             QueryDocumentSnapshot document,
