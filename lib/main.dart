@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import './Screens/Login.dart';
+import './Screens/Loading.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +16,7 @@ class RoadLance extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Roadlance',
       home: Scaffold(
-        body: Login(),
+        body: LoadingScreen(),
       ),
     );
   }

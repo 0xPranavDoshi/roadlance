@@ -26,13 +26,23 @@ class _RegisterState extends State<Register> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.only(bottom: 30),
+                padding: EdgeInsets.only(bottom: 15),
                 child: Text(
                   'Register',
                   style: TextStyle(
                     color: Color(0xFFffb86c),
                     fontFamily: 'Karla-Medium',
                     fontSize: 30,
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Image.asset(
+                    'assets/images/avatar.png',
+                    width: 120,
                   ),
                 ),
               ),
