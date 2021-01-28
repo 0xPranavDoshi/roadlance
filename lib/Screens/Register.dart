@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../Components/AuthField.dart';
-import './Login.dart';
 import '../Database/AuthManager.dart';
+import 'package:image_picker/image_picker.dart';
 import 'Home.dart';
+import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:path_provider/path_provider.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -10,6 +13,33 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final picker = ImagePicker();
+  File _profilePic;
+  Widget image = CircleAvatar(
+    backgroundImage: AssetImage('assets/images/avatar.png'),
+    radius: 80,
+    backgroundColor: Color(0xFF324985),
+  );
+
+  Future<File> getProfilePic() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _profilePic = File(pickedFile.path);
+      });
+      if (_profilePic != null) {
+        print("ProfilePic => $_profilePic");
+        return _profilePic;
+      }
+    }
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     TextEditingController firstNameController = TextEditingController();
@@ -37,13 +67,19 @@ class _RegisterState extends State<Register> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  print("Get profile pic");
+                  File profilePic = await getProfilePic();
+                  setState(() {
+                    image = CircleAvatar(
+                      backgroundImage: FileImage(profilePic),
+                      radius: 80,
+                    );
+                  });
+                },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 20),
-                  child: Image.asset(
-                    'assets/images/avatar.png',
-                    width: 120,
-                  ),
+                  child: image,
                 ),
               ),
               AuthField(
@@ -84,6 +120,7 @@ class _RegisterState extends State<Register> {
                         emailController.text,
                         passwordController.text,
                         phoneNumberController.text,
+                        _profilePic,
                       );
                       Navigator.push(
                         context,

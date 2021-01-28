@@ -13,12 +13,35 @@ class ProfileTab extends StatefulWidget {
 class _ProfileTabState extends State<ProfileTab> {
   int currentBalance = 0;
   String fullName = '';
+  String profilePicUrl;
+  Widget profilePicWidget = CircleAvatar(
+    backgroundImage: AssetImage('assets/images/avatar.png'),
+    radius: 80,
+    backgroundColor: Color(0xFF324985),
+  );
 
   @override
   void initState() {
     super.initState();
     setCurrentBalance();
     fullName = getDisplayName();
+    Future.delayed(Duration.zero, () async {
+      profilePicUrl = await getProfilePic();
+      setState(() {
+        if (profilePicUrl != null) {
+          profilePicWidget = CircleAvatar(
+            backgroundImage: NetworkImage(profilePicUrl),
+            radius: 80,
+          );
+        }
+      });
+    });
+  }
+
+  Future<String> getProfilePic() async {
+    DatabaseManager manager = DatabaseManager();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    return await manager.getProfilePic(auth.currentUser.uid);
   }
 
   void setCurrentBalance() async {
@@ -60,6 +83,8 @@ class _ProfileTabState extends State<ProfileTab> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            profilePicWidget,
+            // Image.network(profilePicUrl),
             Padding(
               padding: const EdgeInsets.only(bottom: 15),
               child: Text(

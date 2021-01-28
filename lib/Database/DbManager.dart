@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:path_provider/path_provider.dart';
 import './HttpManager.dart';
 import '../Models/Post.dart';
 import 'dart:io';
@@ -262,6 +264,38 @@ class DatabaseManager {
         })
         .then((value) => print("User data saved to Firestore"))
         .catchError((error) => print("Failed to add user data: $error"));
+  }
+
+  Future<File> getImageFileFromAssets(String path) async {
+    final byteData = await rootBundle.load('assets/$path');
+
+    final file = File('${(await getTemporaryDirectory()).path}/$path');
+    await file.writeAsBytes(byteData.buffer
+        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+    return file;
+  }
+
+  Future saveProfilePic(String uid, File file) async {
+    String path = 'Users/$uid/profile_pic';
+
+    if (file == null) {
+      print("No image");
+    } else {
+      try {
+        await firebase_storage.FirebaseStorage.instance.ref(path).putFile(file);
+        print("Successfully added profile pic file");
+      } on firebase_core.FirebaseException catch (e) {
+        print("Error upload profile pic file: ${e.message}");
+      }
+    }
+  }
+
+  Future<String> getProfilePic(String uid) async {
+    String downloadURL = await firebase_storage.FirebaseStorage.instance
+        .ref('Users/$uid/profile_pic')
+        .getDownloadURL();
+    return downloadURL;
   }
 
   Future getNumberPlate(File file, Timestamp time) async {

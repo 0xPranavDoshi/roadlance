@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import './DbManager.dart';
+import 'dart:io';
 
 class AuthManager {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -9,29 +10,35 @@ class AuthManager {
 
   Future<String> login(String email, String password) async {
     try {
+      // ignore: unused_local_variable
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      return 'Success';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
+      return e.message;
     }
   }
 
   Future<String> register(String firstName, String lastName, String email,
-      String password, String phoneNumber) async {
+      String password, String phoneNumber, File profilePic) async {
     print("Regisering user...");
     await auth
         .createUserWithEmailAndPassword(email: email, password: password)
-        .then((UserCredential cred) {
+        .then((UserCredential cred) async {
       print("Successfully registered user");
       String fullName = firstName + " " + lastName;
-      manager.saveUserData(firstName, lastName, fullName, email, phoneNumber);
+      await manager.saveUserData(
+          firstName, lastName, fullName, email, phoneNumber);
+      await manager.saveProfilePic(cred.user.uid, profilePic);
+      return 'Success';
     }).catchError((err) {
       print(err);
       return err;
