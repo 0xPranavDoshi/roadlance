@@ -11,6 +11,7 @@ class AuthField extends StatefulWidget {
   final String placeholder;
   final TextEditingController controller;
   final bool isPassword;
+
   @override
   _AuthFieldState createState() => _AuthFieldState();
 }
@@ -24,7 +25,10 @@ class _AuthFieldState extends State<AuthField> {
         width: 325,
         height: 40,
         child: TextField(
-          controller: widget.controller,
+          onChanged: (newText) {
+            print('${widget.placeholder} is changed to => $newText');
+            setState(() {});
+          },
           textAlign: TextAlign.center,
           textAlignVertical: TextAlignVertical.center,
           style: TextStyle(

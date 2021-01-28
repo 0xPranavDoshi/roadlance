@@ -17,7 +17,7 @@ class _ProfileTabState extends State<ProfileTab> {
   Widget profilePicWidget = CircleAvatar(
     backgroundImage: AssetImage('assets/images/avatar.png'),
     radius: 80,
-    backgroundColor: Color(0xFF324985),
+    backgroundColor: Color(0xFF6272a4),
   );
 
   @override
@@ -78,29 +78,75 @@ class _ProfileTabState extends State<ProfileTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF4b4266),
-      body: Center(
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            profilePicWidget,
-            // Image.network(profilePicUrl),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 15),
-              child: Text(
-                fullName,
-                style: TextStyle(
-                  color: Color(0xFF8be9fd),
-                  fontSize: 23,
-                  fontFamily: 'Karla-Medium',
-                ),
+            Container(
+              color: Color(0xFF282a36),
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 30, top: 30),
+                    child: profilePicWidget,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      fullName,
+                      style: TextStyle(
+                        color: Color(0xFF50fa7b),
+                        fontSize: 23,
+                        fontFamily: 'Karla-Medium',
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 25),
+                    child: Text(
+                      'Current Balance : $currentBalance',
+                      style: TextStyle(
+                        color: Color(0xFF50fa7b),
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Text(
-              'Current Balance : $currentBalance',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xFF44475a),
+                border: Border.all(
+                  color: Color(0xFF282a36),
+                ),
+              ),
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Text(
+                      'Approved posts: 0',
+                      style: TextStyle(
+                        fontFamily: 'Karla-Medium',
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width / 4),
+                  Container(
+                    child: Text(
+                      'Declined posts: 0',
+                      style: TextStyle(
+                        fontFamily: 'Karla-Medium',
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             FlatButton.icon(

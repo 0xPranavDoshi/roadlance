@@ -28,7 +28,7 @@ class AuthManager {
   }
 
   Future<String> register(String firstName, String lastName, String email,
-      String password, String phoneNumber, File profilePic) async {
+      String password, String phoneNumber, dynamic profilePic) async {
     print("Regisering user...");
     await auth
         .createUserWithEmailAndPassword(email: email, password: password)
@@ -38,9 +38,10 @@ class AuthManager {
       await manager.saveUserData(
           firstName, lastName, fullName, email, phoneNumber);
       await manager.saveProfilePic(cred.user.uid, profilePic);
+      print("Success!");
       return 'Success';
     }).catchError((err) {
-      print(err);
+      print("ERROR IS $err");
       return err;
     });
     return null;

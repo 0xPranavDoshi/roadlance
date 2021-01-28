@@ -97,7 +97,7 @@ View your recent posts from the home tab too!
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Karla-Medium',
-                    fontSize: 14),
+                    fontSize: 16),
                 textAlign: TextAlign.justify,
               ),
             ),
