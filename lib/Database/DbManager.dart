@@ -266,14 +266,52 @@ class DatabaseManager {
         .catchError((error) => print("Failed to add user data: $error"));
   }
 
-  Future<File> getImageFileFromAssets(String path) async {
-    final byteData = await rootBundle.load('assets/$path');
+  Future<int> getApprovedPosts(String uid) async {
+    int approvedPosts = 0;
 
-    final file = File('${(await getTemporaryDirectory()).path}/$path');
-    await file.writeAsBytes(byteData.buffer
-        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .collection('Posts')
+        .get()
+        .then(
+          (QuerySnapshot querySnapshot) => {
+            querySnapshot.docs.forEach(
+              (doc) {
+                if (doc['Status'] == 'Approved') {
+                  print("Status is approved!");
+                  approvedPosts += 1;
+                }
+              },
+            )
+          },
+        );
 
-    return file;
+    return approvedPosts;
+  }
+
+  Future<int> getDeclinedPosts(String uid) async {
+    int approvedPosts = 0;
+
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .collection('Posts')
+        .get()
+        .then(
+          (QuerySnapshot querySnapshot) => {
+            querySnapshot.docs.forEach(
+              (doc) {
+                if (doc['Status'] == 'Declined') {
+                  print("Status is declined!");
+                  approvedPosts += 1;
+                }
+              },
+            )
+          },
+        );
+
+    return approvedPosts;
   }
 
   Future saveProfilePic(String uid, File file) async {

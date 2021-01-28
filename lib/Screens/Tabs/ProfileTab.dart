@@ -4,6 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../Database/DbManager.dart';
 import '../Login.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import '../EditProfile.dart';
 
 class ProfileTab extends StatefulWidget {
   @override
@@ -19,6 +22,10 @@ class _ProfileTabState extends State<ProfileTab> {
     radius: 80,
     backgroundColor: Color(0xFF6272a4),
   );
+  int approvedPosts = 0;
+  int declinedPosts = 0;
+  final picker = ImagePicker();
+  File _profilePic;
 
   @override
   void initState() {
@@ -26,6 +33,8 @@ class _ProfileTabState extends State<ProfileTab> {
     setCurrentBalance();
     fullName = getDisplayName();
     Future.delayed(Duration.zero, () async {
+      approvedPosts = await getApprovedPosts();
+      declinedPosts = await getDeclinedPosts();
       profilePicUrl = await getProfilePic();
       setState(() {
         if (profilePicUrl != null) {
@@ -36,6 +45,36 @@ class _ProfileTabState extends State<ProfileTab> {
         }
       });
     });
+  }
+
+  Future<File> changeProfilePic() async {
+    DatabaseManager manager = DatabaseManager();
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      // setState(() {
+      _profilePic = File(pickedFile.path);
+      // });
+      if (_profilePic != null) {
+        print("ProfilePic => $_profilePic");
+        manager.saveProfilePic(auth.currentUser.uid, _profilePic);
+        return _profilePic;
+      }
+    }
+    return null;
+  }
+
+  Future<int> getDeclinedPosts() async {
+    DatabaseManager manager = DatabaseManager();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    return await manager.getDeclinedPosts(auth.currentUser.uid);
+  }
+
+  Future<int> getApprovedPosts() async {
+    DatabaseManager manager = DatabaseManager();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    return await manager.getApprovedPosts(auth.currentUser.uid);
   }
 
   Future<String> getProfilePic() async {
@@ -86,9 +125,56 @@ class _ProfileTabState extends State<ProfileTab> {
               width: MediaQuery.of(context).size.width,
               child: Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 30, top: 30),
-                    child: profilePicWidget,
+                  Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                context: context,
+                                builder: (context) => EditProfile(
+                                  profilePic: profilePicWidget,
+                                ),
+                              ).whenComplete(() {
+                                print("Modal closed!");
+                              });
+                            },
+                            child: Text(
+                              'edit',
+                              style: TextStyle(
+                                color: Color(0xFF8be9fd),
+                                fontSize: 21,
+                                fontFamily: 'Karla-Medium',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: GestureDetector(
+                          onTap: () async {
+                            print("Changing profile pic");
+                            File profilePic = await changeProfilePic();
+                            setState(() {
+                              profilePicWidget = CircleAvatar(
+                                backgroundImage: FileImage(profilePic),
+                                radius: 80,
+                              );
+                            });
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 30, top: 30),
+                            child: profilePicWidget,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 5),
@@ -126,24 +212,48 @@ class _ProfileTabState extends State<ProfileTab> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    child: Text(
-                      'Approved posts: 0',
-                      style: TextStyle(
-                        fontFamily: 'Karla-Medium',
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Approved posts: ',
+                          style: TextStyle(
+                            fontFamily: 'Karla-Medium',
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          '$approvedPosts',
+                          style: TextStyle(
+                            fontFamily: 'Karla-Medium',
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(width: MediaQuery.of(context).size.width / 4),
                   Container(
-                    child: Text(
-                      'Declined posts: 0',
-                      style: TextStyle(
-                        fontFamily: 'Karla-Medium',
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Declined posts: ',
+                          style: TextStyle(
+                            fontFamily: 'Karla-Medium',
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          '$declinedPosts',
+                          style: TextStyle(
+                            fontFamily: 'Karla-Medium',
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

@@ -39,11 +39,6 @@ class _RegisterState extends State<Register> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     // TextEditingController firstNameController = TextEditingController();
     // TextEditingController lastNameController = TextEditingController();
