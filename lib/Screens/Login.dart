@@ -14,6 +14,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController emailAddressController = TextEditingController();
   TextEditingController isPasswordController = TextEditingController();
+  String email;
+  String password;
   FirebaseAuth auth = FirebaseAuth.instance;
   String errorMessage = 'Unknown Error';
   bool errorVisible = false;
@@ -157,34 +159,146 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: 40,
                   ),
-                  AuthField(
-                    controller: emailAddressController,
-                    placeholder: 'Email',
-                    isPassword: false,
+                  // AuthField(
+                  //   controller: emailAddressController,
+                  //   placeholder: 'Email',
+                  //   isPassword: false,
+                  // ),
+                  // AuthField(
+                  //   controller: isPasswordController,
+                  //   placeholder: 'Password',
+                  //   isPassword: true,
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15.0),
+                    child: SizedBox(
+                      width: 325,
+                      height: 40,
+                      child: TextField(
+                        onChanged: (newText) {
+                          setState(() {
+                            email = newText;
+                            print('Email is changed to => $email');
+                          });
+                        },
+                        textAlign: TextAlign.center,
+                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Karla-Medium',
+                        ),
+                        obscureText: false,
+                        cursorColor: Color(0xFF50fa7b),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(top: 10),
+                          hintText: 'Email..',
+                          hintStyle: TextStyle(
+                            fontFamily: 'Karla-Medium',
+                            color: Colors.grey,
+                          ),
+                          fillColor: Color(0xFF4b4266),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF50fa7b),
+                              width: 3.5,
+                            ),
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF50fa7b),
+                              width: 3.5,
+                            ),
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          disabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF50fa7b),
+                              width: 3.5,
+                            ),
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                  AuthField(
-                    controller: isPasswordController,
-                    placeholder: 'Password',
-                    isPassword: true,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15.0),
+                    child: SizedBox(
+                      width: 325,
+                      height: 40,
+                      child: TextField(
+                        onChanged: (newText) {
+                          setState(() {
+                            password = newText;
+                            print('Password is changed to => $password');
+                          });
+                        },
+                        textAlign: TextAlign.center,
+                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Karla-Medium',
+                        ),
+                        obscureText: true,
+                        cursorColor: Color(0xFF50fa7b),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(top: 10),
+                          hintText: 'Password..',
+                          hintStyle: TextStyle(
+                            fontFamily: 'Karla-Medium',
+                            color: Colors.grey,
+                          ),
+                          fillColor: Color(0xFF4b4266),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF50fa7b),
+                              width: 3.5,
+                            ),
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF50fa7b),
+                              width: 3.5,
+                            ),
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          disabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF50fa7b),
+                              width: 3.5,
+                            ),
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 15),
                     child: RaisedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         AuthManager manager = AuthManager();
-                        manager.login(
-                          emailAddressController.text,
-                          isPasswordController.text,
+                        print("Email is $email\nPassword is $password");
+                        String status = await manager.login(
+                          email,
+                          password,
                         );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeScreen(
-                              showWelcomePopup: false,
-                              tab: 0,
+                        if (status == 'Success') {
+                          print("Success");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(
+                                showWelcomePopup: false,
+                                tab: 0,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        } else {
+                          print("Error is $status");
+                        }
                       },
                       color: Color(0xFF8be9fd),
                       shape: RoundedRectangleBorder(

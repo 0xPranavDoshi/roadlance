@@ -53,9 +53,7 @@ class _ProfileTabState extends State<ProfileTab> {
 
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      // setState(() {
       _profilePic = File(pickedFile.path);
-      // });
       if (_profilePic != null) {
         print("ProfilePic => $_profilePic");
         manager.saveProfilePic(auth.currentUser.uid, _profilePic);
@@ -89,6 +87,28 @@ class _ProfileTabState extends State<ProfileTab> {
     setState(() {
       currentBalance = updatedBalance;
     });
+  }
+
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => EditProfile(
+        profilePic: profilePicWidget,
+        fullName: fullName,
+      ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0.0, 1.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
   }
 
   String getDisplayName() {
@@ -133,16 +153,7 @@ class _ProfileTabState extends State<ProfileTab> {
                           alignment: Alignment.topRight,
                           child: GestureDetector(
                             onTap: () {
-                              showModalBottomSheet(
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                context: context,
-                                builder: (context) => EditProfile(
-                                  profilePic: profilePicWidget,
-                                ),
-                              ).whenComplete(() {
-                                print("Modal closed!");
-                              });
+                              Navigator.of(context).push(_createRoute());
                             },
                             child: Text(
                               'edit',

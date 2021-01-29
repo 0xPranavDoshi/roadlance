@@ -336,6 +336,15 @@ class DatabaseManager {
     return downloadURL;
   }
 
+  Future changeUsername(String uid, String fullName) async {
+    return await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .update({'FullName': fullName})
+        .then((value) => print("Updated FullName"))
+        .catchError((error) => print("Failed to update FullName: $error"));
+  }
+
   Future getNumberPlate(File file, Timestamp time) async {
     String numberPlate;
     String url;
